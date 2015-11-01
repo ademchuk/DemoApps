@@ -1,5 +1,3 @@
-package Task2;
-
 import java.util.ArrayList;
 /**
  * Created by User1 on 10/31/2015.
