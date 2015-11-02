@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.event.MouseInputListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -15,21 +16,20 @@ public class SimpleGUI implements ActionListener {
 
     public void go () {
         JFrame frame = new JFrame();
-        MyDrawPanel drawPanel = new MyDrawPanel();
-        frame.add(drawPanel);
-//        button = new JButton("click me");
-//x
-//        button.addActionListener(this);
-//
-//        frame.agetContentPane().add(button);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000,1000);
+        MyDrawPanel drawPanel = new MyDrawPanel(frame.getWidth(), frame.getHeight());
+        frame.add(drawPanel);
+        drawPanel.addMouseListener(new MouseListenerImpl(drawPanel));
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
         frame.setVisible(true);
 
 
 
 
     }
+
 
 
     @Override
