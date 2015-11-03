@@ -1,7 +1,4 @@
 import javax.swing.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 /**
  * Created by User1 on 11/2/2015.
@@ -13,7 +10,7 @@ public class Main {
 
         GameField gameField = new GameField(frame.getWidth(), frame.getHeight());
         frame.add(gameField);
-        gameField.addKeyListener(new Controller(gameField));
+        gameField.addKeyListener(new WASDController(gameField));
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
