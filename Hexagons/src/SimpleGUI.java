@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 /**
  * Created by User1 on 11/1/2015.
  */
-public class SimpleGUI implements ActionListener {
+public class    SimpleGUI implements ActionListener {
     JButton button;
     public static void main(String[] args) {
         SimpleGUI simpleGUI = new SimpleGUI();
