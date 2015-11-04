@@ -10,13 +10,13 @@ public class Main {
 
         GameField gameField = new GameField(frame.getWidth(), frame.getHeight());
         frame.add(gameField);
-        gameField.addKeyListener(new WASDController(gameField));
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setVisible(true);
 
         gameField.setFocusable(true);
-
+        for (;;)
+        gameField.engine.process();
     }
 }

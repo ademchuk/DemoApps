@@ -7,18 +7,24 @@ import java.awt.*;
 public class GameField extends JPanel {
     int HEIGHT, WIDTH;
     Ship ship;
+    Engine engine;
 
 
     GameField(int height, int width) {
         this.HEIGHT = height;
         this.WIDTH = width;
-        ship = new Ship();
+        ship = new Ship(WIDTH/2, HEIGHT/2);
+
+        engine = new Engine(this);
+        this.addKeyListener(new WASDController(this));
+        this.addMouseMotionListener(new MouseController(this));
     }
 
     public void paintComponent (Graphics g) {
         fillBackground(g);
         g.setColor(Color.WHITE);
-        ship.reDraw(g);
+        ship.draw(g);
+
     }
 
     private void fillBackground (Graphics g) {

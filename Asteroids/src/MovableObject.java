@@ -1,12 +1,23 @@
 import java.awt.*;
 
 /**
- * Created by User1 on 11/3/2015.
+ * Created by User1 on 11/4/2015.
  */
-public class Ship extends MovableObject {
+public class MovableObject {
+    //TODO - Figure out what to do with this shit
+    int xPos, yPos;
 
-    public Ship(int xPos, int yPos) {
-        super(xPos, yPos, 0, new int[]{0, 5, 10, 5}, new int[]{30, 0, 30, 25});
+    double rotationAngle;
+
+    int[] xPoints;
+    int[] yPoints;
+
+    public MovableObject(int xPos, int yPos, double rotationAngle, int[] xPoints, int[] yPoints) {
+        this.xPos = xPos;
+        this.yPos = yPos;
+        this.rotationAngle = rotationAngle;
+        this.xPoints = xPoints;
+        this.yPoints = yPoints;
     }
 
     public void draw(Graphics g) {
@@ -23,17 +34,11 @@ public class Ship extends MovableObject {
 //        x' = x cos f - y sin f
 //        y' = y cos f + x sin f
 
-        for (int i = 0; i < xPoints.length; i++) {
-            //TODO - need to rotate about the mid
-            x[0][i] = (int) (xPoints[i] * Math.cos(rotationAngle) - yPoints[i] * Math.sin(rotationAngle));
-            x[1][i] = (int) (yPoints[i] * Math.cos(rotationAngle) + xPoints[i] * Math.sin(rotationAngle));
-        }
         //move obj to required position
         for (int i = 0; i < xPoints.length; i++) {
             x[0][i] += xPos;
             x[1][i] += yPos;
         }
-
         return x;
     }
 }

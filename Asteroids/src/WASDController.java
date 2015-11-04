@@ -6,46 +6,19 @@ import java.util.Set;
  * Created by User1 on 11/2/2015.
  */
 //
-public class WASDController implements KeyListener{
+public class WASDController implements KeyListener {
     GameField gameField;
-    int X_INCREMENT;
-    int Y_INCREMENT;
-    int SLEEP_TIME;
-    int DEFAULT_INCREMENT;
+    Engine engine;
     private final Set<Character> pressed = new HashSet<Character>();
 
 
-    int MAX_SPEED = 5; //should limit the increment
+
 
     public WASDController(GameField gameField) {
         this.gameField = gameField;
-        X_INCREMENT = 0;
-        Y_INCREMENT = 0;
-        SLEEP_TIME = 200; //ms
-        DEFAULT_INCREMENT = 1;
+        engine = gameField.engine;
     }
 
-    public void moveX (int defaultIncrement) {
-        while (Math.abs(X_INCREMENT) < MAX_SPEED) {
-            X_INCREMENT+=defaultIncrement;
-            try {
-                Thread.sleep(SLEEP_TIME);
-            } catch (InterruptedException e) {
-                System.out.println(e.fillInStackTrace());
-            }
-        }
-    }
-
-    public void moveY (int defaultIncrement) {
-        while (Math.abs(Y_INCREMENT) < MAX_SPEED) {
-            Y_INCREMENT+=defaultIncrement;
-            try {
-                Thread.sleep(SLEEP_TIME);
-            } catch (InterruptedException e) {
-                System.out.println(e.fillInStackTrace());
-            }
-        }
-    }
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -54,31 +27,48 @@ public class WASDController implements KeyListener{
     @Override
     public void keyPressed(KeyEvent e) {
         char x = e.getKeyChar();
-        pressed.add(x);
+        keyPressedFilter(x);
 
-        if (x == 'w') {
-            moveY(-DEFAULT_INCREMENT);
-        } else if (x == 's') {
-            moveY(DEFAULT_INCREMENT);
+        if (pressed.add(x)) {
+            switch (x) {
+                case 'w':
+                    engine.setY_ACCELERATION(-engine.DEFAULT_ACCELERATION);
+                    break;
+                case 's':
+                    engine.setY_ACCELERATION(engine.DEFAULT_ACCELERATION);
+                    break;
+                case 'a':
+                    engine.setX_ACCELERATION(-engine.DEFAULT_ACCELERATION);
+                    break;
+                case 'd':
+                    engine.setX_ACCELERATION(engine.DEFAULT_ACCELERATION);
+                    break;
+            }
         }
-        if (x == 'a') {
-            moveX(-DEFAULT_INCREMENT);
-        } else if (x == 'd') {
-            moveX(DEFAULT_INCREMENT);
-        }
-        moveShipOnPressedKey();
-        gameField.repaint();
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        Y_INCREMENT = 0;
-        X_INCREMENT = 0;
-        gameField.repaint();
+
+        pressed.remove(e.getKeyChar());
+        switch (e.getKeyChar()) {
+            case 'w':
+                engine.setY_ACCELERATION(0);
+                break;
+            case 's':
+                engine.setY_ACCELERATION(0);
+                break;
+            case 'a':
+                engine.setX_ACCELERATION(0);
+                break;
+            case 'd':
+                engine.setX_ACCELERATION(0);
+                break;
+        }
     }
 
-    private void moveShipOnPressedKey() {
-        gameField.ship.xPos+=X_INCREMENT;
-        gameField.ship.yPos+=Y_INCREMENT;
+    private void keyPressedFilter (char x) {
+        //TODO to sort out action when 'a' & 'd' pressed at the same time
     }
+
 }
