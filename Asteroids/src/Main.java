@@ -17,6 +17,6 @@ public class Main {
 
         gameField.setFocusable(true);
         for (;;)
-        gameField.engine.process();
+            gameField.engine.process();
     }
 }

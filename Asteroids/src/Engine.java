@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * Created by User1 on 11/2/2015.
@@ -6,58 +7,54 @@ import java.awt.*;
 public class Engine {
     GameField gameField;
     Ship ship;
-    int DEFAULT_ACCELERATION;
-    private int X_ACCELERATION;
-    private int Y_ACCELERATION;
+
+    private int DEFAULT_ACCELERATION;
+
+//    private int X_ACCELERATION;
+//    private int Y_ACCELERATION;
     Point mousePointer;
+    int timer;
+    ArrayList<Asteroid> asteroids;
+
+    //TODO - use unitVsPicRation var
+    int unitVsPicRation = 100;
 
     public Engine(GameField gameField) {
         this.gameField = gameField;
         this.ship = gameField.ship;
-        DEFAULT_ACCELERATION = 2;
-        X_ACCELERATION = 0;
-        Y_ACCELERATION = 0;
+        DEFAULT_ACCELERATION = 2000;
         mousePointer = new Point();
+        asteroids = gameField.asteroids;
+        gameField.mousePointer = this.mousePointer;
+    }
+    //TODO - Limit max speed - so objects can move with max speed; x=2 y=2 speed should be same as x=2 y=0 ???
+
+    public int getDEFAULT_ACCELERATION() {
+        return DEFAULT_ACCELERATION;
     }
 
     public void process () {
-        moveShip(X_ACCELERATION,Y_ACCELERATION);
-//        moveOtherSpaceObjects();
-//        detectCollisions();
+
+        ship.move();
+        for (Asteroid asteroid : asteroids) {
+            asteroid.move();
+        }
+
+        //TODO - DETECT COLLISIONS
+
         gameField.repaint();
 
+
+        if (timer  > 200) {
+            asteroids.add(new Asteroid(gameField, DEFAULT_ACCELERATION));
+            timer = 0;
+        }
+
         try {
+            timer++;
             Thread.sleep(10);
         } catch (InterruptedException e) {
             System.out.println(e.getStackTrace());
         }
-    }
-
-    public void moveShip(int xAcceleration, int yAcceleration) {
-        calculateShipAngle();
-        ship.xPos+=xAcceleration;
-        ship.yPos+=yAcceleration;
-//        gameField.ship.recalculatePosition();
-    }
-
-    public void calculateShipAngle () {
-        //get initial vector 5;15 - to get ship center
-        int x = (int) (mousePointer.getX() - ship.xPos);
-        int y = (int) (mousePointer.getY() - ship.yPos);
-// a {x,y} b {0,-1}
-//        cos α = a · b
-//                |a| · |b|
-        ship.rotationAngle = Math.acos(-y / Math.sqrt(x * x + y * y));
-
-        if (x < 0) {
-            ship.rotationAngle = 2*Math.PI-ship.rotationAngle;
-        }
-    }
-    public void setX_ACCELERATION(int x_ACCELERATION) {
-        X_ACCELERATION = x_ACCELERATION;
-    }
-
-    public void setY_ACCELERATION(int y_ACCELERATION) {
-        Y_ACCELERATION = y_ACCELERATION;
     }
 }

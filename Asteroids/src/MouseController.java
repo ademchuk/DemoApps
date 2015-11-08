@@ -13,8 +13,8 @@ public class MouseController extends MouseAdapter {
 
     @Override
     public void mouseMoved (MouseEvent e) {
-        gameField.engine.mousePointer.x = (int) e.getPoint().getX();
-        gameField.engine.mousePointer.y = (int) e.getPoint().getY();
+        gameField.engine.mousePointer.x = (int) e.getPoint().getX()*gameField.scale;
+        gameField.engine.mousePointer.y = (int) e.getPoint().getY()*gameField.scale;
     }
 
     @Override

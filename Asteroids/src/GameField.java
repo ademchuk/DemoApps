@@ -1,19 +1,23 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * Created by User1 on 11/2/2015.
  */
 public class GameField extends JPanel {
+    int scale;
     int HEIGHT, WIDTH;
     Ship ship;
     Engine engine;
-
+    Point mousePointer;
+    ArrayList<Asteroid> asteroids = new ArrayList<Asteroid>();
 
     GameField(int height, int width) {
+        scale = 1000;
         this.HEIGHT = height;
         this.WIDTH = width;
-        ship = new Ship(WIDTH/2, HEIGHT/2);
+        ship = new Ship(this);
 
         engine = new Engine(this);
         this.addKeyListener(new WASDController(this));
@@ -24,12 +28,14 @@ public class GameField extends JPanel {
         fillBackground(g);
         g.setColor(Color.WHITE);
         ship.draw(g);
-
+        for (Asteroid asteroid : asteroids) {
+            asteroid.draw(g);
+        }
     }
 
-    private void fillBackground (Graphics g) {
+    public void fillBackground (Graphics g) {
         g.setColor(Color.black);
-        g.fillRect(0,0,HEIGHT,WIDTH);
+        g.fillRect(0,0,WIDTH,HEIGHT);
     }
 
 }
