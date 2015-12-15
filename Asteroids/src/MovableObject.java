@@ -40,7 +40,6 @@ public class MovableObject {
     }
 
     public void draw(Graphics g) {
-//        g.drawPolygon(xBuffPoints, yBuffPoints, xPoints.length);
         g.drawPolygon(buffPoints[0], buffPoints[1], xPoints.length);
         if (destroyed) {
             if (liveAfterDeath > 0) {

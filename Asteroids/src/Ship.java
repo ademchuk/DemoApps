@@ -3,13 +3,11 @@
  * Created by User1 on 11/3/2015.
  */
 public class Ship extends MovableObject {
-    //TODO - add more lives
-//    int lives;
+    //TODO - add lives
     int[][] firePoint;
 
     public Ship(GameField gameField) {
         super(gameField.WIDTH * gameField.scale / 2, gameField.HEIGHT * gameField.scale / 2, 0, new int[]{15, -15, 15, 10}, new int[]{-5, 0, 5, 0}, gameField);
-//        lives = 3;
         firePoint = new  int[2][];
         firePoint[0] = new int[] {-15}; //x
         firePoint[1] = new int[] {0};   //y
@@ -30,8 +28,6 @@ public class Ship extends MovableObject {
     }
 
     public void recalcPolygon() {
-//        xBuffPoints = Arrays.copyOf(xPoints, xPoints.length);
-//        yBuffPoints = Arrays.copyOf(yPoints, xPoints.length);
         buffPoints = rotate(xPoints, yPoints);
         calculateAngle(gameField.mousePointer.x, gameField.mousePointer.y);
 

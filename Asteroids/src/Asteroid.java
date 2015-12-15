@@ -12,34 +12,6 @@ public class Asteroid extends MovableObject {
         super(xPos, yPos, rotationAngle, xPoints, yPoints, gameField);
     }
 
-    //TODO - modify to support asteroids of different size
-//    private Asteroid(GameField gameField, int defaultAcceleration, int size) {
-//        this(0, 0, 0, new int[]{-5, -5, 5, 5}, new int[]{-5, 5, 5, -5}, gameField);
-//        this.size = size;
-//        liveAfterDeath = 10;
-//        calculateStartPosition();
-//        calculateAngle(gameField.ship.xPos, gameField.ship.yPos);
-//        calculateXYAccelerations(defaultAcceleration * gameField.scale);
-//        isBullet = false;
-//    }
-
-//    private Asteroid(GameField gameField, int shotAcceleration, boolean isBullet) {
-//        this(0, 0, 0, new int[]{-2, -2, 2, 2}, new int[]{-2, 2, 2, -2}, gameField);
-//
-//        liveAfterDeath = 10;
-//        size = 4;
-//        rotationAngle = gameField.ship.rotationAngle;
-//        xPos = gameField.ship.firePoint[0][0];
-//        yPos = gameField.ship.firePoint[1][0];
-//        this.isBullet = isBullet;
-//        calculateXYAccelerations(shotAcceleration * gameField.scale);
-//
-//        //TODO refactor this shit
-//        //should get a position of a fire gun
-//        xPos = rotate(gameField.ship.firePoint[0], gameField.ship.firePoint[1])[0][0] + gameField.ship.xPos;
-//        yPos = rotate(gameField.ship.firePoint[0], gameField.ship.firePoint[1])[1][0] + gameField.ship.yPos;
-//    }
-
     public void calculateXYAccelerations(int defaultAcceleration) {
         setX_ACCELERATION((int) (defaultAcceleration * Math.cos(rotationAngle)));
         setY_ACCELERATION((int) (-defaultAcceleration * Math.sin(rotationAngle)));
