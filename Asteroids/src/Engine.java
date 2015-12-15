@@ -1,5 +1,5 @@
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by User1 on 11/2/2015.
@@ -10,14 +10,9 @@ public class Engine {
 
     private int DEFAULT_ACCELERATION;
 
-//    private int X_ACCELERATION;
-//    private int Y_ACCELERATION;
     Point mousePointer;
     int timer;
-    ArrayList<Asteroid> asteroids;
-
-    //TODO - use unitVsPicRation var
-    int unitVsPicRation = 100;
+    CopyOnWriteArrayList<Asteroid> asteroids;
 
     public Engine(GameField gameField) {
         this.gameField = gameField;
@@ -40,21 +35,62 @@ public class Engine {
             asteroid.move();
         }
 
-        //TODO - DETECT COLLISIONS
+        cleanUp();
+        collisionDetection();
+        removeDestroyedObjects();
 
         gameField.repaint();
 
-
-        if (timer  > 200) {
-            asteroids.add(new Asteroid(gameField, DEFAULT_ACCELERATION));
+        if (timer  > 20) {
+            int randomizedSpeed = (int) (Math.random()*5);
+            int randomizedSize = (int) (Math.random()*20+5);
+            asteroids.add(Asteroid.createAsteroid(gameField, randomizedSpeed, randomizedSize, false));
             timer = 0;
         }
 
         try {
             timer++;
-            Thread.sleep(10);
+            Thread.sleep(10); //~100 framees per second
         } catch (InterruptedException e) {
             System.out.println(e.getStackTrace());
         }
     }
+
+    private void removeDestroyedObjects() {
+        for (Asteroid asteroid : asteroids) {
+            if (asteroid.destroyed) {
+                asteroid.stopObject();
+                asteroid.destroyObject();
+            }
+            if (ship.destroyed) {
+                ship.destroyObject();
+            }
+        }
+    }
+
+    public void collisionDetection() {
+        for (Asteroid asteroid : asteroids) {
+            for (Asteroid asteroid1 : asteroids) {
+                if (!asteroid.equals(asteroid1)) {
+                    if (asteroid.isCollide(asteroid1)) {
+                        asteroid.destroyed = true;
+                        asteroid1.destroyed = true;
+                    }
+                }
+            }
+            if (asteroid.isCollide(ship) && !asteroid.isBullet) {
+                asteroid.destroyed = true;
+                ship.destroyed = true;
+            }
+        }
+    }
+
+    public void cleanUp () {
+        for (int i = 0; i < asteroids.size(); i++ ) {
+            if (asteroids.get(i).isOutOfSight) {
+                asteroids.remove(i);
+            }
+        }
+    }
+
 }

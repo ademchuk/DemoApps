@@ -1,6 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by User1 on 11/2/2015.
@@ -11,7 +11,7 @@ public class GameField extends JPanel {
     Ship ship;
     Engine engine;
     Point mousePointer;
-    ArrayList<Asteroid> asteroids = new ArrayList<Asteroid>();
+    CopyOnWriteArrayList<Asteroid> asteroids = new CopyOnWriteArrayList<Asteroid>();
 
     GameField(int height, int width) {
         scale = 1000;
@@ -29,7 +29,14 @@ public class GameField extends JPanel {
         g.setColor(Color.WHITE);
         ship.draw(g);
         for (Asteroid asteroid : asteroids) {
-            asteroid.draw(g);
+            if (asteroid.destroyed) {
+                asteroid.liveAfterDeath--;
+            }
+            if (asteroid.liveAfterDeath <= 0 ) {
+                asteroids.remove(asteroid);
+            } else {
+                asteroid.draw(g);
+            }
         }
     }
 

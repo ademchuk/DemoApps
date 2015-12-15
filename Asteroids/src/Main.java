@@ -16,7 +16,8 @@ public class Main {
         frame.setVisible(true);
 
         gameField.setFocusable(true);
-        for (;;)
+        while (!gameField.engine.ship.destroyed) {
             gameField.engine.process();
+        }
     }
 }
