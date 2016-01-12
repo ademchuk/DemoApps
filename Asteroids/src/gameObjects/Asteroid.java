@@ -1,3 +1,7 @@
+package gameObjects;
+
+import ui.GameField;
+
 import java.util.Random;
 
 /**
@@ -5,17 +9,14 @@ import java.util.Random;
  */
 public class Asteroid extends MovableObject {
     int ASTEROID_RADIUS;
-    boolean isOutOfSight;
-    boolean isBullet;
+    public boolean isOutOfSight;
+    public boolean isBullet;
 
     private Asteroid(int xPos, int yPos, double rotationAngle, int[] xPoints, int[] yPoints, GameField gameField) {
         super(xPos, yPos, rotationAngle, xPoints, yPoints, gameField);
     }
 
-    public void calculateXYAccelerations(int defaultAcceleration) {
-        setX_ACCELERATION((int) (defaultAcceleration * Math.cos(rotationAngle)));
-        setY_ACCELERATION((int) (-defaultAcceleration * Math.sin(rotationAngle)));
-    }
+
 
     private void calculateStartPosition() {
         Random random = new Random();
@@ -45,7 +46,7 @@ public class Asteroid extends MovableObject {
         }
     }
 
-    static Asteroid createAsteroid(GameField gameField, int defaultAcceleration, int size, boolean isBullet) {
+    public static Asteroid createAsteroid(GameField gameField, int defaultAcceleration, int size, boolean isBullet) {
         int[][] points = new int[2][];
         points[0] = new int[]{-1, -1, 1, 1};
         points[1] = new int[]{-1, 1, 1, -1};

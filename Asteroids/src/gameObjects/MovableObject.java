@@ -1,3 +1,7 @@
+package gameObjects;
+
+import ui.GameField;
+
 import java.awt.*;
 
 /**
@@ -5,19 +9,15 @@ import java.awt.*;
  */
 public class MovableObject {
     int scale = 1000;
-    int size;
-    int xPos, yPos;
-    //    int[] xBuffPoints, yBuffPoints;
+    public int size;
+    public int xPos;
+    public int yPos;
     int[][] buffPoints;
-    int liveAfterDeath;
-
-    boolean destroyed;
-
-    double rotationAngle;
-
-    private int X_ACCELERATION;
-    private int Y_ACCELERATION;
-
+    public int liveAfterDeath;
+    public boolean destroyed;
+    public double rotationAngle;
+    public int X_ACCELERATION;
+    public int Y_ACCELERATION;
     int[] xPoints;
     int[] yPoints;
 
@@ -29,13 +29,11 @@ public class MovableObject {
         this.rotationAngle = rotationAngle;
         this.xPoints = xPoints;
         this.yPoints = yPoints;
-        this.gameField = gameField;
-//        xBuffPoints = xPoints.clone();
-//        yBuffPoints = yPoints.clone();
         buffPoints = new int[2][];
         buffPoints[0] = xPoints.clone();
         buffPoints[1] = yPoints.clone();
         destroyed = false;
+        this.gameField = gameField;
 
     }
 
@@ -50,18 +48,20 @@ public class MovableObject {
         }
     }
 
+    public void calculateXYAccelerations(int defaultAcceleration) {
+        X_ACCELERATION = ((int) (defaultAcceleration * Math.cos(rotationAngle)));
+        Y_ACCELERATION = ((int) (-defaultAcceleration * Math.sin(rotationAngle)));
+    }
+
     public void move() {
         //move obj to required position
         xPos += X_ACCELERATION;
         yPos += Y_ACCELERATION;
+        continuousParty();
         recalcPolygon();
     }
 
     public void recalcPolygon() {
-//        xBuffPoints = Arrays.copyOf(xPoints, xPoints.length);
-//        yBuffPoints = Arrays.copyOf(yPoints, xPoints.length);
-//        buffPoints[0] = Arrays.copyOf(xPoints, xPoints.length);
-//        buffPoints[1] = Arrays.copyOf(yPoints, xPoints.length);
         buffPoints = rotate(xPoints, yPoints);
 
         for (int i = 0; i < buffPoints[0].length; i++) {
@@ -96,25 +96,9 @@ public class MovableObject {
         }
     }
 
-    public void setX_ACCELERATION(int x_ACCELERATION) {
-        X_ACCELERATION = x_ACCELERATION;
-    }
-
-    public void setY_ACCELERATION(int y_ACCELERATION) {
-        Y_ACCELERATION = y_ACCELERATION;
-    }
-
-    public int getX_ACCELERATION() {
-        return X_ACCELERATION;
-    }
-
-    public int getY_ACCELERATION() {
-        return Y_ACCELERATION;
-    }
-
     public void stopObject() {
-        setY_ACCELERATION(0);
-        setX_ACCELERATION(0);
+        Y_ACCELERATION = 0;
+        X_ACCELERATION = 0;
     }
 
     public void destroyObject() {
@@ -129,6 +113,19 @@ public class MovableObject {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public void continuousParty() {
+        if (xPos / scale < 0 ) {
+            xPos = gameField.WIDTH*scale;
+        } else if (xPos / scale > gameField.WIDTH) {
+            xPos = 0;
+        }
+        if (yPos / scale < 0) {
+            yPos = gameField.HEIGHT*scale;
+        } else if (yPos / scale > gameField.HEIGHT) {
+            yPos = 0;
         }
     }
 }

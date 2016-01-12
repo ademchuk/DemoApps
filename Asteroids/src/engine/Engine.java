@@ -1,3 +1,9 @@
+package engine;
+
+import gameObjects.Asteroid;
+import gameObjects.Ship;
+import ui.GameField;
+
 import java.awt.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -6,53 +12,45 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class Engine {
     GameField gameField;
-    Ship ship;
+    public Ship ship;
 
     private int DEFAULT_ACCELERATION;
 
-    Point mousePointer;
-    int timer;
-    CopyOnWriteArrayList<Asteroid> asteroids;
+    public Point mousePointer;
+    int timer = 0;
+    public CopyOnWriteArrayList<Asteroid> asteroids;
 
     public Engine(GameField gameField) {
         this.gameField = gameField;
         this.ship = gameField.ship;
         DEFAULT_ACCELERATION = 2000;
-        mousePointer = new Point();
+        mousePointer = new Point(0,0);
         asteroids = gameField.asteroids;
         gameField.mousePointer = this.mousePointer;
     }
     //TODO - Limit max speed - so objects can move with max speed; x=2 y=2 speed should be same as x=2 y=0 ???
 
-    public int getDEFAULT_ACCELERATION() {
-        return DEFAULT_ACCELERATION;
-    }
+    public void process() {
 
-    public void process () {
+        while (!ship.destroyed) {
+            ship.move();
+            for (Asteroid asteroid : asteroids) {
+                asteroid.move();
+            }
 
-        ship.move();
-        for (Asteroid asteroid : asteroids) {
-            asteroid.move();
-        }
+            cleanUp();
+            collisionDetection();
+            removeDestroyedObjects();
+            addAsteroid();
 
-        cleanUp();
-        collisionDetection();
-        removeDestroyedObjects();
+            gameField.repaint();
 
-        gameField.repaint();
 
-        if (timer  > 20) {
-            int randomizedSpeed = (int) (Math.random()*5);
-            int randomizedSize = (int) (Math.random()*20+5);
-            asteroids.add(Asteroid.createAsteroid(gameField, randomizedSpeed, randomizedSize, false));
-            timer = 0;
-        }
-
-        try {
-            timer++;
-            Thread.sleep(10); //~100 framees per second
-        } catch (InterruptedException e) {
-            System.out.println(e.getStackTrace());
+            try {
+                Thread.sleep(10); //~100 framees per second
+            } catch (InterruptedException e) {
+                System.out.println(e.getStackTrace());
+            }
         }
     }
 
@@ -92,5 +90,18 @@ public class Engine {
             }
         }
     }
+
+    private void addAsteroid() {
+        if (timer > 20) {
+            //TODO - use asteroid factory
+            int randomizedSpeed = (int) (Math.random() * 5 + 1);
+            int randomizedSize = (int) (Math.random() * 20 + 5);
+            asteroids.add(Asteroid.createAsteroid(gameField, randomizedSpeed, randomizedSize, false));
+            timer = 0;
+        }
+        timer++;
+    }
+
+
 
 }
