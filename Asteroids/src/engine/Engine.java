@@ -24,7 +24,7 @@ public class Engine {
         this.gameField = gameField;
         this.ship = gameField.ship;
         DEFAULT_ACCELERATION = 2000;
-        mousePointer = new Point(0,0);
+        mousePointer = new Point(0, 0);
         asteroids = gameField.asteroids;
         gameField.mousePointer = this.mousePointer;
     }
@@ -76,17 +76,22 @@ public class Engine {
                     }
                 }
             }
-            if (asteroid.isCollide(ship) && !asteroid.isBullet) {
+            if (asteroid.isCollide(ship)) {
                 asteroid.destroyed = true;
                 ship.destroyed = true;
             }
         }
     }
 
-    public void cleanUp () {
-        for (int i = 0; i < asteroids.size(); i++ ) {
-            if (asteroids.get(i).isOutOfSight) {
-                asteroids.remove(i);
+    public void cleanUp() {
+//        for (Asteroid asteroid : asteroids) {
+//            if (asteroid.getTravelLength() > 1000 && asteroid.isBullet) {
+//                asteroids.remove(asteroid);
+//            }
+//        }
+        for (Asteroid asteroid : asteroids) {
+            if (asteroid.isBullet) {
+                System.out.println(asteroid.getTravelLength());
             }
         }
     }
@@ -101,7 +106,6 @@ public class Engine {
         }
         timer++;
     }
-
 
 
 }
